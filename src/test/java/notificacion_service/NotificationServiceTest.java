@@ -1,32 +1,84 @@
 package notificacion_service;
 
-import notificacion_service.service.NotificationService;
+import notificacion_service.model.*;
+import notificacion_service.service.*;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-@ExtendWith(MockitoExtension.class)
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
 public class NotificationServiceTest {
 
-    @Mock
-    private JavaMailSender mailSender;
-
-    @InjectMocks
+    @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private NotificationTemplateService templateService;
+
+    @MockBean
+    private UserServiceClient userServiceClient;
+
+    @MockBean
+    private AuditServiceClient auditServiceClient;
+
     @Test
-    public void testSendNotification() {
-        String to = "test@example.com";
-        String subject = "Test Subject";
-        String body = "Test Body";
+    public void testCreateDirectNotification() {
+        NotificationDirectRequest request = new NotificationDirectRequest();
+        request.setUsuarioDestinatario(1L);
+        request.setCanal("EMAIL");
+        request.setAsunto("Direct Subject");
+        request.setMensaje("Direct Msg");
+        request.setPrioridad("URGENTE");
 
-        notificationService.sendNotification(to, subject, body);
+        Notification notification = notificationService.createDirectNotification(request);
 
-        Mockito.verify(mailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
+        assertNotNull(notification.getId());
+        assertEquals("EMAIL", notification.getCanal());
+        assertEquals("Direct Subject", notification.getAsunto());
+        assertEquals("Direct Msg", notification.getMensaje());
+        assertEquals("PENDIENTE", notification.getEstado());
+        assertEquals("URGENTE", notification.getPrioridad());
+    }
+
+    @Test
+    public void testCreateTemplateNotification() {
+        // Crear una plantilla
+        NotificationTemplate template = new NotificationTemplate();
+        template.setNombre("bienvenida_test");
+        template.setCanal("EMAIL");
+        template.setPlantillaAsunto("Bienvenido {{nombre}}");
+        template.setPlantillaMensaje("Hola {{nombre}}, tu código es {{codigo}}");
+        template.setVariablesRequeridas("nombre,codigo");
+        template.setEstado(true);
+        
+        try {
+            templateService.createTemplate(template);
+        } catch (Exception e) {
+            // Ya puede existir si corre varias veces en DB persistente
+        }
+
+        NotificationTemplateRequest request = new NotificationTemplateRequest();
+        request.setUsuarioDestinatario(2L);
+        request.setNombrePlantilla("bienvenida_test");
+        request.setPrioridad("NORMAL");
+        
+        Map<String, String> vars = new HashMap<>();
+        vars.put("nombre", "Alison");
+        vars.put("codigo", "9876");
+        request.setVariables(vars);
+
+        Notification notification = notificationService.createTemplateNotification(request);
+
+        assertNotNull(notification.getId());
+        assertEquals("EMAIL", notification.getCanal());
+        assertEquals("Bienvenido Alison", notification.getAsunto());
+        assertEquals("Hola Alison, tu código es 9876", notification.getMensaje());
+        assertEquals("PENDIENTE", notification.getEstado());
     }
 }

@@ -1,0 +1,367 @@
+=== PARAGRAPHS ===
+[0]: DOCUMENTO DE REQUISITOS
+[1]: ms-notificaciones [NOT] - Microservicio transversal de notificaciones
+[3]: Tabla de Contenidos
+[4]: 1. Introducción
+[5]: 2. Requisitos Funcionales
+[6]: 3. Cualidades del Sistema (URPS+)
+[7]: 4. Interfaces del Sistema
+[8]: 5. Reglas de Negocio
+[9]: 6. Restricciones del Sistema
+[10]: 7. Documentación del Sistema
+[11]: 8. Representación Arquitectónica
+[12]: 9. Vista de Caso de Uso
+[13]: 10. Vista Lógica
+[14]: 11. Vista de Proceso
+[15]: 12. Vista de Datos
+[16]: 13. Seguridad
+[17]: 14. Diseño de Integración
+[18]: 15. Especificación de API REST
+[19]: 16. Testing y DevOps
+[20]: 17. Justificaciones Técnicas
+[21]: Apéndice A: Guía de Integración
+[23]: 1. Introducción
+[24]: 1.1 Propósito
+[25]: Este documento consolida la especificación de requisitos del microservicio ms-notificaciones [NOT], componente transversal del ERP Universitario de la Universidad del Valle - Sede Caicedonia. El servicio centraliza el envío de comunicaciones generadas por otros microservicios y, en la implementación actual, expone una API REST para enviar correos electrónicos mediante SMTP.
+[26]: La especificación se construyó a partir del PDF de requisitos funcionales del ERP, el documento consolidado de ms-auditoria usado como ejemplo y el código fuente funcional del proyecto notificacion-service.
+[27]: 1.2 Alcance
+[28]: Recepción de solicitudes de notificación mediante API REST.
+[29]: Envío de correos electrónicos con destinatario, asunto y cuerpo.
+[30]: Configuración SMTP para ambientes de desarrollo y ejecución.
+[31]: Integración simple desde otros microservicios mediante HTTP/JSON.
+[32]: Definición de evolución para plantillas, reintentos, envío masivo, auditoría y salud del servicio.
+[33]: 1.3 Fuera del Alcance Actual
+[34]: Persistencia de notificaciones en base de datos.
+[35]: Gestión completa de plantillas y preferencias de usuario.
+[36]: Canales SMS, push o notificación interna.
+[37]: Autenticación inter-servicio y trazabilidad distribuida implementadas como middleware.
+[38]: Panel administrativo o interfaz gráfica.
+[39]: 1.4 Definiciones y Acrónimos
+[40]: 1.5 Referencias
+[41]: ERP_Universitario_Requisitos_Funcionales.pdf - Propuesta de Arquitectura y Requisitos Funcionales.
+[42]: ms-auditoria_Documento_Consolidado_UNICO.docx - Documento consolidado de referencia.
+[43]: notificacion-service - Código fuente funcional del microservicio.
+[44]: README.md del microservicio - Guía de ejecución e integración.
+[45]: 2. Requisitos Funcionales
+[46]: La matriz separa el alcance implementado en el código actual de los requisitos derivados de la propuesta original del ERP, para facilitar evaluación, trazabilidad y evolución del servicio.
+[47]: 2.1 Requisitos Detallados
+[48]: NOT-RF-001 - Recepción de solicitud por API REST
+[49]: NOT-RF-002 - Envío de correo electrónico vía SMTP
+[50]: NOT-RF-003 - Validación mínima de campos
+[51]: NOT-RF-004 - Respuesta estándar de resultado
+[52]: NOT-RF-005 - Configuración externa SMTP
+[53]: NOT-RF-006 - Consumo desde otros microservicios
+[54]: NOT-RF-007 - Plantillas dinámicas
+[55]: NOT-RF-008 - Envío masivo
+[56]: NOT-RF-009 - Reintentos automáticos
+[57]: NOT-RF-010 - Logs operativos
+[58]: NOT-RF-011 - Integración con ms-auditoria
+[59]: NOT-RF-012 - Health check
+[60]: 3. Cualidades del Sistema (URPS+)
+[61]: 4. Interfaces del Sistema
+[62]: 4.1 Interfaces de Usuario
+[63]: El microservicio no implementa interfaz gráfica. Su interacción principal ocurre mediante API REST consumida por otros microservicios, herramientas de prueba o scripts de integración.
+[64]: 4.2 Interfaces con Sistemas Externos
+[65]: 5. Reglas de Negocio
+[66]: Toda notificación por correo debe contener destinatario, asunto y cuerpo.
+[67]: El destinatario debe corresponder a una dirección de correo válida.
+[68]: El servicio no debe exponer credenciales SMTP en respuestas, logs ni documentación pública.
+[69]: Los errores del proveedor de correo deben traducirse a respuestas controladas.
+[70]: Plantillas, preferencias, prioridades y reintentos quedan definidos como evolución alineada con el ERP.
+[71]: 6. Restricciones del Sistema
+[72]: Implementación actual en Java 17 y Spring Boot 2.6.7.
+[73]: Endpoint activo en el puerto configurado server.port=8017.
+[74]: El envío depende de conectividad hacia el servidor SMTP configurado.
+[75]: La versión actual no persiste historial de notificaciones ni reintentos.
+[76]: La configuración sensible debe migrarse a variables de entorno o gestor de secretos antes de compartir el repositorio.
+[77]: 7. Documentación del Sistema
+[78]: El repositorio incluye un README con requisitos previos, configuración, ejecución local, contrato del endpoint y ejemplo de consumo desde Python. Esta documentación debe mantenerse sincronizada con cualquier cambio de API o configuración.
+[79]: 8. Representación Arquitectónica
+[80]: 8.1 Stack Tecnológico
+[81]: 8.2 Estructura del Proyecto
+[82]: NotificationApplication.java: punto de entrada de Spring Boot.
+[83]: NotificationController.java: controlador REST para POST /notifications.
+[84]: NotificationService.java: capa de servicio que construye y envía SimpleMailMessage.
+[85]: NotificationRequest.java: DTO con campos to, subject y body.
+[86]: application.properties: configuración SMTP y puerto de aplicación.
+[87]: NotificationControllerTest.java y NotificationServiceTest.java: pruebas del controlador y servicio.
+[88]: 8.3 Flujo de un Request
+[89]: Un microservicio consumidor envía POST /notifications con cuerpo JSON.
+[90]: Spring MVC deserializa el JSON en NotificationRequest.
+[91]: NotificationController invoca NotificationService.sendNotification.
+[92]: NotificationService crea SimpleMailMessage y llama JavaMailSender.send.
+[93]: El proveedor SMTP acepta o rechaza el envío.
+[94]: El controlador responde 200 si fue exitoso o 500 si capturó una excepción.
+[95]: 8.4 Endpoints Implementados y Propuestos
+[96]: 9. Vista de Caso de Uso
+[97]: 10. Vista Lógica
+[98]: NotificationController depende de NotificationService mediante inyección de dependencias. NotificationService depende de JavaMailSender, bean provisto por Spring Boot a partir de las propiedades spring.mail.*. NotificationRequest se usa como DTO de entrada.
+[99]: 11. Vista de Proceso
+[100]: El proceso principal es síncrono: la petición HTTP espera a que el servicio SMTP acepte o rechace la operación. Para envío masivo, reintentos y prioridades, se recomienda evolucionar hacia procesamiento asíncrono con cola o scheduler interno.
+[101]: 12. Vista de Datos
+[102]: La implementación actual no define entidades JPA ni tablas propias para notificaciones. El dato operativo viaja como DTO en memoria y se entrega al servidor SMTP. La propuesta original contempla persistir notificaciones, plantillas, preferencias e historial de reintentos como evolución.
+[103]: 13. Seguridad
+[104]: Las credenciales SMTP deben cargarse desde variables de entorno o un gestor de secretos.
+[105]: No se deben imprimir destinatarios sensibles, credenciales ni cuerpos completos en logs de producción.
+[106]: El endpoint debe incorporar autenticación inter-servicio antes de exponerse fuera de un entorno local.
+[107]: Las respuestas de error deben evitar filtrar detalles internos del proveedor SMTP.
+[108]: Se recomienda rotar las credenciales si estuvieron expuestas en archivos de configuración.
+[109]: 14. Diseño de Integración
+[110]: El contrato entrante es HTTP/JSON. Los consumidores deben construir un payload con to, subject y body y enviarlo a la URL base configurada del servicio NOT. La respuesta HTTP 200 indica aceptación del envío; los códigos de error deben registrarse en el flujo consumidor.
+[111]: 15. Especificación de API REST
+[112]: 16. Testing y DevOps
+[113]: La versión actual incluye pruebas unitarias y de controlador. NotificationServiceTest verifica que JavaMailSender.send sea invocado una vez; NotificationControllerTest valida que POST /notifications retorne HTTP 200 con un payload básico. Se recomiendan pruebas de validación de campos, escenarios de error SMTP e integración con MailHog.
+[114]: Ejecutar localmente con .\mvnw.cmd spring-boot:run en Windows o ./mvnw spring-boot:run en Linux/Mac.
+[115]: Empaquetar con Maven y ejecutar el JAR generado cuando se requiera despliegue manual.
+[116]: Configurar server.port=8017 o variable equivalente según el ambiente.
+[117]: Separar perfiles de desarrollo, pruebas y producción.
+[118]: Usar MailHog para pruebas locales cuando no se quiera enviar correo real.
+[119]: 17. Justificaciones Técnicas
+[120]: Spring Boot permite exponer una API REST mínima con bajo esfuerzo de configuración.
+[121]: JavaMailSender abstrae la comunicación SMTP y facilita pruebas con mocks.
+[122]: Separar controlador, servicio y DTO mantiene responsabilidades claras.
+[123]: Maven Wrapper mejora reproducibilidad en equipos distintos.
+[124]: La evolución hacia plantillas, persistencia y reintentos debe conservar el endpoint simple actual para compatibilidad.
+[125]: Apéndice A: Guía de Integración
+[126]: Para solicitar una notificación, el consumidor debe enviar POST a http://localhost:8017/notifications con Content-Type application/json. El cuerpo debe incluir to, subject y body. El consumidor debe manejar errores HTTP 4xx/5xx y registrar el resultado dentro de su propio flujo de negocio.
+[127]: Nota de seguridad: este documento no incluye valores reales de usuario o contraseña SMTP. En ambientes compartidos, las credenciales deben reemplazarse por variables de entorno y rotarse si estuvieron expuestas en archivos de configuración.
+
+=== TABLES ===
+
+--- Table 0 ---
+Row 0: Proyecto | ERP Universitario - Sistema de Gestión Integral basado en Microservicios
+Row 1: Institución | Universidad del Valle - Sede Caicedonia
+Row 2: Microservicio | ms-notificaciones [NOT]
+Row 3: Stack implementado | Java 17 + Spring Boot 2.6.7 + Spring Web + Spring Mail
+Row 4: Versión del documento | 1.0
+Row 5: Fecha | Mayo 2026
+Row 6: Fuente técnica | notificacion-service, PDF base y documento ms-auditoria de referencia
+
+--- Table 1 ---
+Row 0: Término | Definición
+Row 1: ERP | Enterprise Resource Planning; sistema integral de gestión institucional.
+Row 2: NOT | Código del microservicio ms-notificaciones.
+Row 3: SMTP | Protocolo usado para envío de correo electrónico.
+Row 4: Spring Mail | Módulo de Spring usado para abstraer el envío de correo.
+Row 5: MailHog | Servidor SMTP local para pruebas de captura de correos.
+Row 6: Request ID | Identificador de trazabilidad distribuida requerido por la arquitectura del ERP.
+
+--- Table 2 ---
+Row 0: ID | Nombre | Estado | Descripción
+Row 1: NOT-RF-001 | Recepción de solicitud por API REST | Implementado | El sistema debe exponer POST /notifications para recibir destinatario, asunto y cuerpo en JSON.
+Row 2: NOT-RF-002 | Envío de correo electrónico vía SMTP | Implementado | El sistema debe enviar correos usando JavaMailSender y configuración SMTP externa.
+Row 3: NOT-RF-003 | Validación mínima de campos | Recomendado | El sistema debe exigir destinatario, asunto y cuerpo no vacíos; el destinatario debe tener formato de correo.
+Row 4: NOT-RF-004 | Respuesta estándar de resultado | Parcial | El sistema debe informar éxito o error sin exponer datos sensibles.
+Row 5: NOT-RF-005 | Configuración externa SMTP | Parcial | El sistema debe configurar host, puerto, usuario, contraseña y STARTTLS sin modificar código.
+Row 6: NOT-RF-006 | Consumo desde otros microservicios | Soportado | El servicio debe ser punto central para que otros microservicios soliciten notificaciones.
+Row 7: NOT-RF-007 | Plantillas dinámicas | Pendiente | El sistema debe permitir plantillas reutilizables con variables reemplazables para asunto y mensaje.
+Row 8: NOT-RF-008 | Envío masivo | Pendiente | El sistema debe permitir enviar una misma notificación a múltiples destinatarios.
+Row 9: NOT-RF-009 | Reintentos automáticos | Pendiente | El sistema debe reintentar fallos temporales con máximo configurable y backoff progresivo.
+Row 10: NOT-RF-010 | Logs operativos | Parcial | El sistema debe registrar eventos técnicos para diagnóstico sin exponer datos sensibles.
+Row 11: NOT-RF-011 | Integración con ms-auditoria | Pendiente | El sistema debe enviar auditoría asíncrona por cada operación relevante.
+Row 12: NOT-RF-012 | Health check | Recomendado | El sistema debe exponer un endpoint de salud para monitoreo de disponibilidad.
+
+--- Table 3 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-001
+Row 2: Nombre | Recepción de solicitud por API REST
+Row 3: Estado | Implementado
+Row 4: Descripción | El sistema debe exponer POST /notifications para recibir destinatario, asunto y cuerpo en JSON.
+Row 5: Secuencia normal | Microservicio consumidor envía JSON; controlador deserializa; servicio procesa; respuesta 200 si el envío se completa.
+Row 6: Excepciones | Error SMTP o excepción: HTTP 500 controlado.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 4 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-002
+Row 2: Nombre | Envío de correo electrónico vía SMTP
+Row 3: Estado | Implementado
+Row 4: Descripción | El sistema debe enviar correos usando JavaMailSender y configuración SMTP externa.
+Row 5: Secuencia normal | Crear SimpleMailMessage; asignar to, subject y body; invocar JavaMailSender.send.
+Row 6: Excepciones | Host, autenticación o destinatario inválido provocan fallo controlado.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 5 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-003
+Row 2: Nombre | Validación mínima de campos
+Row 3: Estado | Recomendado
+Row 4: Descripción | El sistema debe exigir destinatario, asunto y cuerpo no vacíos; el destinatario debe tener formato de correo.
+Row 5: Secuencia normal | Validar campos antes de enviar; solo procesar solicitudes válidas.
+Row 6: Excepciones | Campo faltante o inválido: HTTP 400 con detalle.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 6 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-004
+Row 2: Nombre | Respuesta estándar de resultado
+Row 3: Estado | Parcial
+Row 4: Descripción | El sistema debe informar éxito o error sin exponer datos sensibles.
+Row 5: Secuencia normal | Éxito: HTTP 200; error: código acorde y mensaje controlado; evolución: incluir requestId y timestamp.
+Row 6: Excepciones | Error no clasificado: HTTP 500 sin filtrar credenciales.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 7 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-005
+Row 2: Nombre | Configuración externa SMTP
+Row 3: Estado | Parcial
+Row 4: Descripción | El sistema debe configurar host, puerto, usuario, contraseña y STARTTLS sin modificar código.
+Row 5: Secuencia normal | Leer propiedades desde ambiente o gestor de secretos; permitir MailHog en desarrollo.
+Row 6: Excepciones | Configuración incompleta: fallo explícito de arranque o envío.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 8 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-006
+Row 2: Nombre | Consumo desde otros microservicios
+Row 3: Estado | Soportado
+Row 4: Descripción | El servicio debe ser punto central para que otros microservicios soliciten notificaciones.
+Row 5: Secuencia normal | Consumidor construye payload; envía POST; evalúa respuesta; registra resultado.
+Row 6: Excepciones | Servicio no disponible, timeout o error SMTP.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 9 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-007
+Row 2: Nombre | Plantillas dinámicas
+Row 3: Estado | Pendiente
+Row 4: Descripción | El sistema debe permitir plantillas reutilizables con variables reemplazables para asunto y mensaje.
+Row 5: Secuencia normal | Buscar plantilla; validar variables; reemplazar {{variable}}; enviar notificación.
+Row 6: Excepciones | Plantilla inexistente, inactiva o variable ausente.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 10 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-008
+Row 2: Nombre | Envío masivo
+Row 3: Estado | Pendiente
+Row 4: Descripción | El sistema debe permitir enviar una misma notificación a múltiples destinatarios.
+Row 5: Secuencia normal | Recibir lista; procesar destinatarios; registrar resultados individuales; responder resumen.
+Row 6: Excepciones | Lista vacía, destinatarios inválidos o fallos parciales.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 11 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-009
+Row 2: Nombre | Reintentos automáticos
+Row 3: Estado | Pendiente
+Row 4: Descripción | El sistema debe reintentar fallos temporales con máximo configurable y backoff progresivo.
+Row 5: Secuencia normal | Clasificar fallo; programar intento; incrementar contador; detener al máximo.
+Row 6: Excepciones | Máximo alcanzado: marcar como fallida.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 12 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-010
+Row 2: Nombre | Logs operativos
+Row 3: Estado | Parcial
+Row 4: Descripción | El sistema debe registrar eventos técnicos para diagnóstico sin exponer datos sensibles.
+Row 5: Secuencia normal | Registrar recepción, resultado y errores con formato consistente.
+Row 6: Excepciones | Fallo de logging no debe interrumpir el envío.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 13 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-011
+Row 2: Nombre | Integración con ms-auditoria
+Row 3: Estado | Pendiente
+Row 4: Descripción | El sistema debe enviar auditoría asíncrona por cada operación relevante.
+Row 5: Secuencia normal | Generar evento NOT; incluir resultado, fecha y requestId; enviar a ms-auditoria.
+Row 6: Excepciones | Timeout o token inválido; registrar localmente.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 14 ---
+Row 0: Campo | Detalle
+Row 1: Código | NOT-RF-012
+Row 2: Nombre | Health check
+Row 3: Estado | Recomendado
+Row 4: Descripción | El sistema debe exponer un endpoint de salud para monitoreo de disponibilidad.
+Row 5: Secuencia normal | Responder UP si la app está disponible; opcionalmente validar conectividad SMTP.
+Row 6: Excepciones | Dependencia crítica no disponible: estado degradado o DOWN.
+Row 7: Postcondición | La solicitud queda procesada, rechazada de forma controlada o marcada como pendiente según el alcance del requisito.
+
+--- Table 15 ---
+Row 0: Categoría | Requisito de calidad
+Row 1: Usabilidad | API simple de consumir mediante JSON y mensajes claros de éxito o error.
+Row 2: Confiabilidad | Manejo controlado de fallos SMTP sin detener la aplicación.
+Row 3: Rendimiento | El envío directo debe responder en tiempos razonables; envíos masivos futuros deberían ser asíncronos.
+Row 4: Soportabilidad | Configuración externa y compatible con ambientes de desarrollo, pruebas y producción.
+Row 5: Seguridad | Credenciales SMTP fuera del repositorio, logs y respuestas.
+Row 6: Observabilidad | Logs operativos y futura integración con ms-auditoria.
+
+--- Table 16 ---
+Row 0: Sistema | Tipo | Uso
+Row 1: Servidor SMTP Gmail o equivalente | Externo | Entrega real de correos electrónicos.
+Row 2: MailHog | Herramienta local | Captura de correos en pruebas sin envío real.
+Row 3: Microservicios consumidores | Interno ERP | Solicitud de envío de notificaciones.
+Row 4: ms-auditoria | Interno ERP | Registro asíncrono de eventos; pendiente.
+Row 5: ms-usuarios | Interno ERP | Consulta de contacto y preferencias; pendiente.
+
+--- Table 17 ---
+Row 0: Componente | Tecnología
+Row 1: Lenguaje | Java 17
+Row 2: Framework | Spring Boot 2.6.7
+Row 3: API REST | Spring Web
+Row 4: Correo | Spring Boot Starter Mail / JavaMailSender
+Row 5: Pruebas | JUnit 5, Spring Boot Test, Mockito, MockMvc
+Row 6: Build | Maven Wrapper
+Row 7: Logging | Logback
+
+--- Table 18 ---
+Row 0: Método | Endpoint | Descripción | Estado
+Row 1: POST | /notifications | Recibe JSON y envía correo por SMTP. | Implementado
+Row 2: GET | /health | Consulta disponibilidad del servicio. | Recomendado
+Row 3: POST | /notifications/template | Envía notificación usando plantilla dinámica. | Pendiente
+Row 4: POST | /notifications/bulk | Envía una notificación a múltiples destinatarios. | Pendiente
+
+--- Table 19 ---
+Row 0: Código | Caso de uso | Actor principal
+Row 1: CU-NOT-001 | Enviar correo electrónico directo | Microservicio consumidor
+Row 2: CU-NOT-002 | Configurar proveedor SMTP | Administrador técnico
+Row 3: CU-NOT-003 | Consumir servicio desde otro microservicio | Microservicio consumidor
+Row 4: CU-NOT-004 | Diagnosticar fallo de envío | Equipo de soporte
+Row 5: CU-NOT-005 | Enviar notificación por plantilla | Microservicio consumidor
+
+--- Table 20 ---
+Row 0: Clase | Responsabilidad
+Row 1: NotificationApplication | Inicializa el contexto de Spring Boot.
+Row 2: NotificationController | Expone el endpoint REST y coordina la respuesta HTTP.
+Row 3: NotificationService | Contiene la lógica de envío de correo mediante JavaMailSender.
+Row 4: NotificationRequest | Transporta los datos de entrada: to, subject y body.
+Row 5: MailConfig | Configuración manual alternativa actualmente comentada.
+
+--- Table 21 ---
+Row 0: Dato | Campo | Tipo lógico | Estado
+Row 1: Solicitud de notificación | to | Correo electrónico | Implementado en DTO
+Row 2: Solicitud de notificación | subject | Texto corto | Implementado en DTO
+Row 3: Solicitud de notificación | body | Texto largo | Implementado en DTO
+Row 4: Notificación persistida | estado, intentos, fechas, requestId | Entidad futura | Pendiente
+Row 5: Plantilla | asunto, mensaje, variables | Entidad futura | Pendiente
+Row 6: Preferencia de usuario | canal, horario no molestar | Entidad futura | Pendiente
+
+--- Table 22 ---
+Row 0: Consumidor | Evento típico de notificación
+Row 1: ms-usuarios | Creación, activación o suspensión de cuenta.
+Row 2: ms-inventario | Stock mínimo alcanzado.
+Row 3: ms-presupuesto | Partida cerca del umbral de alerta.
+Row 4: ms-facturacion | Factura próxima a vencer o vencida.
+Row 5: ms-domicilios | Cambio de estado de entrega.
+Row 6: ms-calificaciones | Publicación de notas o bajo rendimiento.
+Row 7: ms-proveedores | Contratos o documentos próximos a vencer.
+
+--- Table 23 ---
+Row 0: Elemento | Detalle
+Row 1: Método | POST
+Row 2: Ruta | /notifications
+Row 3: Content-Type | application/json
+Row 4: Puerto local | 8017
+Row 5: Cuerpo | {"to":"destinatario@ejemplo.com","subject":"Título","body":"Mensaje"}
+Row 6: Respuesta exitosa | HTTP 200 - Notification sent successfully
+Row 7: Respuesta de error actual | HTTP 500 - Error al enviar el correo: <detalle>
+
+--- Table 24 ---
+Row 0: Campo | Obligatorio | Descripción
+Row 1: to | Sí | Correo del destinatario.
+Row 2: subject | Sí | Asunto del correo.
+Row 3: body | Sí | Contenido textual del mensaje.

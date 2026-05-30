@@ -39,7 +39,7 @@ Abre una terminal en el directorio raíz del proyecto y corre el siguiente coman
 ./mvnw spring-boot:run
 ```
 
-Si deseas únicamente generar el ejecutable `.jar`, puedes usar `mvnw clean install` y posteriormente ejecutarlo con `java -jar target/notificaciones-service-0.0.1-SNAPSHOT.jar`.
+Si deseas únicamente generar el ejecutable `.jar`, puedes usar `./mvnw clean install` (o `.mvnw.cmd clean install` en Windows PowerShell) y posteriormente ejecutarlo con `java -jar target/notificaciones-service-0.0.1-SNAPSHOT.jar`.
 
 ## Endpoints de la API
 
