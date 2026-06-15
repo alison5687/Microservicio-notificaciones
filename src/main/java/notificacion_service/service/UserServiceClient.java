@@ -1,32 +1,35 @@
 package notificacion_service.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import notificacion_service.model.UserPreference;
-import notificacion_service.repository.UserPreferenceRepository;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import notificacion_service.model.UserPreference;
+import notificacion_service.repository.UserPreferenceRepository;
 
 @Service
 public class UserServiceClient {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceClient.class);
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+    private final UserPreferenceRepository userPreferenceRepository;
 
     @Value("${services.usuarios.url:http://localhost:8000/api/v1}")
     private String usuariosServiceUrl;
 
-    @Autowired
-    private UserPreferenceRepository userPreferenceRepository;
+    public UserServiceClient(RestTemplate restTemplate, UserPreferenceRepository userPreferenceRepository) {
+        this.restTemplate = restTemplate;
+        this.userPreferenceRepository = userPreferenceRepository;
+    }
 
     public static class UserDto {
         private Long id;

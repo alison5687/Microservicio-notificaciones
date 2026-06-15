@@ -8,6 +8,7 @@ public class NotificationDirectRequest {
     private String prioridad; // URGENTE, NORMAL, BAJA
     private String trackingId;
     private Integer intentosMaximos;
+    private String destinatarioDirecto;
 
     // Getters y Setters
     public Long getUsuarioDestinatario() {
@@ -64,5 +65,13 @@ public class NotificationDirectRequest {
 
     public void setIntentosMaximos(Integer intentosMaximos) {
         this.intentosMaximos = intentosMaximos;
+    }
+
+    public String getDestinatarioDirecto() {
+        return destinatarioDirecto;
+    }
+
+    public void setDestinatarioDirecto(String destinatarioDirecto) {
+        this.destinatarioDirecto = destinatarioDirecto;
     }
 }

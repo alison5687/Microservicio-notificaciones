@@ -1,0 +1,122 @@
+2026-06-15 14:36:24 [main] INFO  n.NotificationApplication - Starting NotificationApplication using Java 26.0.1 on Ali with PID 25492 (C:\Users\ASUS\Desktop\notificacion-service\target\classes started by ASUS in C:\Users\ASUS\Desktop\notificacion-service)
+2026-06-15 14:36:24 [main] INFO  n.NotificationApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-15 14:36:25 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-15 14:36:25 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 79 ms. Found 4 JPA repository interfaces.
+2026-06-15 14:36:26 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8017 (http)
+2026-06-15 14:36:26 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8017"]
+2026-06-15 14:36:26 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-15 14:36:26 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.62]
+2026-06-15 14:36:26 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-06-15 14:36:26 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1601 ms
+2026-06-15 14:36:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-15 14:36:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-15 14:36:27 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./data/notificacion'
+2026-06-15 14:36:27 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-15 14:36:27 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.8.Final
+2026-06-15 14:36:27 [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-15 14:36:27 [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-06-15 14:36:28 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-15 14:36:28 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-15 14:36:28 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-15 14:36:29 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8017"]
+2026-06-15 14:36:29 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8017 (http) with context path ''
+2026-06-15 14:36:29 [main] INFO  n.NotificationApplication - Started NotificationApplication in 4.853 seconds (JVM running for 5.287)
+2026-06-15 14:36:29 [main] INFO  n.config.DatabaseSeeder - [SEEDER] Iniciando sembrado de datos en H2...
+2026-06-15 14:36:29 [main] INFO  n.config.DatabaseSeeder - [SEEDER] Creando plantilla de prueba 'bienvenida'...
+2026-06-15 14:36:29 [main] INFO  n.config.DatabaseSeeder - [SEEDER] Creando plantilla de prueba 'alerta_stock'...
+2026-06-15 14:36:29 [main] INFO  n.config.DatabaseSeeder - [SEEDER] Creando preferencias por defecto para usuarios de prueba 1 y 2...
+2026-06-15 14:36:29 [main] INFO  n.config.DatabaseSeeder - [SEEDER] Sembrado de datos finalizado con éxito.
+2026-06-15 14:41:37 [http-nio-8017-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-15 14:41:37 [http-nio-8017-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-15 14:41:37 [http-nio-8017-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-06-15 14:41:37 [http-nio-8017-exec-2] INFO  n.service.NotificationService - [SERVICE] Creada notificación directa ID 1 para destinatario alisonji5697@gmail.com (Prioridad: NORMAL, Canal: EMAIL)
+2026-06-15 14:41:37 [task-1] INFO  n.service.AuditServiceClient - [AUDIT-LOG] [ASYNC-START] Operación: 'CREAR_NOTIFICACION', Detalles: 'Notificación directa registrada para destinatario alisonji5697@gmail.com por canal EMAIL', TrackingId: '119148c7-ec65-450f-85cf-1a39ff94ecc5', Estado: 'SUCCESS'
+2026-06-15 14:41:37 [task-1] WARN  n.service.AuditServiceClient - [AUDIT-LOG] [SIMULADO] ms-auditoria no disponible (I/O error on POST request for "http://localhost:8081/api/v1/logs": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect). Log registrado localmente en consola.
+2026-06-15 14:41:39 [scheduling-1] INFO  n.service.NotificationProcessor - [PROCESSOR] Encontradas 1 notificaciones pendientes para procesar
+2026-06-15 14:41:39 [scheduling-1] INFO  n.s.impl.EmailNotificationSender - [SENDER] [EMAIL] Iniciando envío de correo real a 'alisonji5697@gmail.com'. Asunto: 'Demo - Notificación Directa'
+2026-06-15 14:41:44 [scheduling-1] INFO  n.s.impl.EmailNotificationSender - [SENDER] [EMAIL] [SUCCESS] Correo enviado exitosamente a 'alisonji5697@gmail.com'
+2026-06-15 14:41:44 [task-2] INFO  n.service.AuditServiceClient - [AUDIT-LOG] [ASYNC-START] Operación: 'ENVIAR_NOTIFICACION', Detalles: 'Notificación enviada con éxito a través de EMAIL a alisonji5697@gmail.com', TrackingId: '119148c7-ec65-450f-85cf-1a39ff94ecc5', Estado: 'SUCCESS'
+2026-06-15 14:41:44 [task-2] WARN  n.service.AuditServiceClient - [AUDIT-LOG] [SIMULADO] ms-auditoria no disponible (I/O error on POST request for "http://localhost:8081/api/v1/logs": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect). Log registrado localmente en consola.
+2026-06-15 14:54:44 [http-nio-8017-exec-7] ERROR n.config.RestExceptionHandler - JSON parse error: Invalid UTF-8 middle byte 0x6e
+ at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 135]
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Invalid UTF-8 middle byte 0x6e; nested exception is com.fasterxml.jackson.databind.JsonMappingException: Invalid UTF-8 middle byte 0x6e
+ at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 135] (through reference chain: notificacion_service.model.NotificationDirectRequest["mensaje"])
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:391)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:343)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:185)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:160)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:133)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:179)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:146)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:890)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+Caused by: com.fasterxml.jackson.databind.JsonMappingException: Invalid UTF-8 middle byte 0x6e
+ at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 135] (through reference chain: notificacion_service.model.NotificationDirectRequest["mensaje"])
+	at com.fasterxml.jackson.databind.JsonMappingException.wrapWithPath(JsonMappingException.java:392)
+	at com.fasterxml.jackson.databind.JsonMappingException.wrapWithPath(JsonMappingException.java:351)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.wrapAndThrow(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:393)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:184)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:322)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4674)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3682)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:380)
+	... 51 common frames omitted
+Caused by: com.fasterxml.jackson.core.JsonParseException: Invalid UTF-8 middle byte 0x6e
+ at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 1, column: 135]
+	at com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:2391)
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:735)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._reportInvalidOther(UTF8StreamJsonParser.java:3652)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._reportInvalidOther(UTF8StreamJsonParser.java:3659)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._decodeUtf8_4(UTF8StreamJsonParser.java:3485)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._finishString2(UTF8StreamJsonParser.java:2565)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._finishAndReturnString(UTF8StreamJsonParser.java:2507)
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser.getText(UTF8StreamJsonParser.java:334)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:41)
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:11)
+	at com.fasterxml.jackson.databind.deser.impl.MethodProperty.deserializeAndSet(MethodProperty.java:129)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:391)
+	... 56 common frames omitted

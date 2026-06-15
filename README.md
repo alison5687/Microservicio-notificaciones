@@ -1,36 +1,24 @@
-# Microservicio de Notificaciones
+# Microservicio de Notificaciones (ms-notificaciones)
 
-Este microservicio está construido en Spring Boot (Java 17) y proporciona una API REST sencilla para enviar notificaciones por correo electrónico utilizando el protocolo SMTP.
+Este microservicio transversal está construido en **Spring Boot (Java 17)** y actúa como una cola asíncrona de distribución de notificaciones via EMAIL para el ecosistema del ERP Universitario.
 
-## Requisitos Previos
+---
 
-- Java 17
-- Maven o usar el Maven Wrapper (`mvnw`) que viene incluido en este repositorio.
-- **MailHog** (Para pruebas locales): El proyecto está configurado para conectarse a un servidor SMTP local en el puerto `1025`. Debes tener MailHog (o una alternativa similar) ejecutándose en tu máquina antes de iniciar el microservicio.
+## 🚀 Requisitos Previos
 
-## Configuración
+- **Java 17** instalado en tu sistema.
+- **Maven** (o usa el Maven Wrapper `mvnw.cmd` incluido).
+- **MailHog** (para pruebas locales de correo): 
+  - Ejecuta el archivo `MailHog.exe` en la raíz del proyecto para levantar el servidor SMTP local en el puerto `1025` y el panel web en `http://localhost:8025`.
 
-Antes de ejecutar el servicio, debes proporcionar tus credenciales reales enviando correos electrónicos.
-Abre el archivo `src/main/resources/application.properties` y modifica las siguientes líneas:
+---
 
-```properties
-spring.mail.username=tu_correo@gmail.com
-spring.mail.password=tu_contraseña_o_clave_de_aplicacion
-```
+## ⚡ Cómo Ejecutar el Proyecto
 
-> **Importante acerca de Gmail:** Si usas tu cuenta de Gmail, Google ya no permite introducir tu contraseña normal de inicio de sesión. Necesitarás tener verificación en dos pasos activada y [generar una "Contraseña de aplicación"](https://support.google.com/accounts/answer/185833).
+Abre una terminal en el directorio raíz del proyecto y ejecuta:
 
-Adicionalmente, el puerto de la aplicación está definido en este mismo archivo:
-```properties
-server.port=8017
-```
-
-## Cómo ejecutar el proyecto
-
-Abre una terminal en el directorio raíz del proyecto y corre el siguiente comando usando el wrapper de Maven incluido.
-
-**En Windows:**
-```bash
+**En Windows (PowerShell):**
+```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -39,60 +27,114 @@ Abre una terminal en el directorio raíz del proyecto y corre el siguiente coman
 ./mvnw spring-boot:run
 ```
 
-Si deseas únicamente generar el ejecutable `.jar`, puedes usar `./mvnw clean install` (o `.mvnw.cmd clean install` en Windows PowerShell) y posteriormente ejecutarlo con `java -jar target/notificaciones-service-0.0.1-SNAPSHOT.jar`.
+Al iniciar, un componente de inicialización (**DatabaseSeeder**) cargará de forma automática plantillas de prueba (ej: `bienvenida`) y preferencias en la base de datos **H2 en archivo persistente**, asegurando que el microservicio esté listo para ser probado de inmediato.
 
-## Endpoints de la API
+---
 
-La aplicación cuenta con el siguiente endpoint de prueba para disparar un correo electrónico.
+## 🧪 Abrir H2 Console y consultar la base persistente
 
-### `POST /notifications`
-Envía un correo electrónico a un destinatario en particular.
+1. Levanta el servicio:
+   ```powershell
+   .\mvnw.cmd spring-boot:run
+   ```
+2. Abre en el navegador:
+   ```text
+   http://localhost:8017/h2-console
+   ```
+3. Completa los datos así:
+   * **Driver Class:** `org.h2.Driver`
+   * **JDBC URL:** `jdbc:h2:file:C:/Users/ASUS/Desktop/notificacion-service/data/notificacion`
+   * **User Name:** `sa`
+   * **Password:** (déjalo vacío)
+4. Pulsa **Connect**.
+5. Para ver las notificaciones guardadas, ejecuta:
+   ```sql
+   SELECT id, destinatario_directo, canal, asunto, estado, fecha_envio, fecha_proximo_intento
+   FROM notification
+   ORDER BY fecha_creacion DESC;
+   ```
 
-**Headers:**
-- `Content-Type: application/json`
 
-**Payload:**
 
+---
+
+## 📌 Endpoints Clave para la Demostración
+
+### 1. Chequeo de Salud (`GET /notifications/health`)
+Verifica que el servicio y la base de datos están activos.
+* **URL:** `http://localhost:8017/notifications/health`
+
+---
+
+### 2. Envío Directo por Correo (`POST /notifications`)
+Envía una notificación directamente usando la dirección de correo electrónico del destinatario (sin necesidad de que esté registrado en el sistema).
+* **URL:** `http://localhost:8017/notifications`
+* **Cuerpo (JSON):**
 ```json
 {
-  "to": "destinatario@ejemplo.com",
-  "subject": "Título del Correo",
-  "body": "Contenido o texto principal del mensaje"
+  "destinatarioDirecto": "alisonji5697@gmail.com",
+  "canal": "EMAIL",
+  "asunto": "Demo - Notificación Directa",
+  "mensaje": "¡Hola! Este correo fue enviado directamente ingresando el email.",
+  "prioridad": "NORMAL"
+}
+```
+### 2.1 Envío Directo por correo
+
+#### Windows PowerShell
+```powershell
+$json = '{"destinatarioDirecto":"alisonji5697@gmail.com","canal":"EMAIL","asunto":"Prueba desde curl","mensaje":"Hola, esta es una notificación enviada desde curl.","prioridad":"NORMAL"}'
+
+curl.exe -X POST "http://localhost:8017/notifications" \
+  -H "Content-Type: application/json; charset=UTF-8" \
+  -d $json
+```
+
+#### Alternativa usando un archivo JSON
+```powershell
+@'
+{
+  "destinatarioDirecto": "alisonji5697@gmail.com",
+  "canal": "EMAIL",
+  "asunto": "Prueba desde curl",
+  "mensaje": "Hola, esta es una notificación enviada desde curl.",
+  "prioridad": "NORMAL"
+}
+'@ > payload.json
+
+curl.exe -X POST "http://localhost:8017/notifications" \
+  -H "Content-Type: application/json; charset=UTF-8" \
+  --data-binary @payload.json
+```
+
+#### Linux / Mac / Git Bash (bash)
+```bash
+cat > payload.json <<'EOF'
+{"destinatarioDirecto":"alisonji5697@gmail.com","canal":"EMAIL","asunto":"Prueba desde curl","mensaje":"Hola, esta es una notificación enviada desde curl.","prioridad":"NORMAL"}
+EOF
+
+curl -X POST "http://localhost:8017/notifications" \
+  -H "Content-Type: application/json; charset=UTF-8" \
+  --data-binary @payload.json
+```
+
+> Usar un archivo JSON es más seguro en terminales Windows/Git Bash porque evita problemas de codificación con caracteres especiales como acentos.
+
+---
+
+### 3. Envío por Plantilla Reutilizable (`POST /notifications/template`)
+Genera un correo dinámico utilizando una plantilla pre-cargada.
+* **URL:** `http://localhost:8017/notifications/template`
+* **Cuerpo (JSON):**
+```json
+{
+  "usuarioDestinatario": 1,
+  "nombrePlantilla": "bienvenida",
+  "variables": {
+    "nombre": "Carlos Gómez",
+    "username": "carlos.gomez"
+  },
+  "prioridad": "NORMAL"
 }
 ```
 
-**Ejemplo usando cURL:**
-
-```bash
-curl -X POST http://localhost:8017/notifications \
-     -H "Content-Type: application/json" \
-     -d "{\"to\": \"destinatario@ejemplo.com\", \"subject\": \"Test de integracion\", \"body\": \"Funcionando correctamente\"}"
-```
-
-## Integración con otros microservicios (Ejemplo en Python)
-
-Dado que este microservicio expone una API REST estándar, puede ser consumido desde cualquier otro lenguaje. A continuación, un ejemplo de cómo enviar una notificación desde otro microservicio escrito en **Python** usando la librería `requests`.
-
-```python
-import requests
-
-def enviar_notificacion(destinatario, asunto, mensaje):
-    url = "http://localhost:8017/notifications"
-    
-    payload = {
-        "to": destinatario,
-        "subject": asunto,
-        "body": mensaje
-    }
-    
-    try:
-        # requests.post con json=payload automáticamente agrega el Content-Type: application/json
-        response = requests.post(url, json=payload)
-        response.raise_for_status() # Verifica si hubo error HTTP
-        print("Notificación enviada con éxito:", response.text)
-    except requests.exceptions.RequestException as e:
-        print("Error al enviar la notificación:", e)
-
-# Ejemplo de uso:
-enviar_notificacion("usuario@ejemplo.com", "Bienvenido", "Gracias por registrarte en nuestra app.")
-```

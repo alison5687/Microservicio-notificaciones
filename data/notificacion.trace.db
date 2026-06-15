@@ -1,0 +1,29 @@
+2026-06-15 14:37:58 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "Test-Path .[*]\\data\\notificacion.mv.db\000d\000aGet-ChildItem .\\data | Format-List"
+Syntax error in SQL statement "Test-Path .[*]\\data\\notificacion.mv.db\000d\000aGet-ChildItem .\\data | Format-List"; SQL statement:
+Test-Path .\data\notificacion.mv.db
+Get-ChildItem .\data | Format-List [42000-214]
+2026-06-15 14:38:20 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "cd C:[*]\\Users\\ASUS\\Desktop\\notificacion-service\000d\000amkdir data\000d\000aGet-ChildItem .\\datat"
+Syntax error in SQL statement "cd C:[*]\\Users\\ASUS\\Desktop\\notificacion-service\000d\000amkdir data\000d\000aGet-ChildItem .\\datat"; SQL statement:
+cd C:\Users\ASUS\Desktop\notificacion-service
+mkdir data
+Get-ChildItem .\datat [42000-214]
+2026-06-15 14:40:05 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "NOTIFICATION" no encontrada
+Table "NOTIFICATION" not found; SQL statement:
+SELECT id, destinatario_directo, canal, asunto, estado, fecha_envio, fecha_proximo_intento, intentos_realizados, intentos_maximos
+FROM notification
+ORDER BY fecha_creacion DESC [42102-214]
+2026-06-15 14:40:33 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "NOTIFICATIONNOTIFICATIONS" no encontrada
+Table "NOTIFICATIONNOTIFICATIONS" not found; SQL statement:
+SELECT id, destinatario_directo, canal, asunto, estado, fecha_envio, fecha_proximo_intento, intentos_realizados, intentos_maximos
+FROM notificationNOTIFICATIONS 
+ORDER BY fecha_creacion DESC [42102-214]
+2026-06-15 14:51:31 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "NOTIFICATION" no encontrada
+Table "NOTIFICATION" not found; SQL statement:
+SELECT id, destinatario_directo, canal, asunto, estado, fecha_envio, fecha_proximo_intento
+   FROM notification
+   ORDER BY fecha_creacion DESC [42102-214]

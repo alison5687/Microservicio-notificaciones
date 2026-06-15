@@ -11,8 +11,11 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "usuario_destinatario", nullable = false)
+    @Column(name = "usuario_destinatario", nullable = true)
     private Long usuarioDestinatario;
+
+    @Column(name = "destinatario_directo")
+    private String destinatarioDirecto;
 
     @Column(name = "canal", nullable = false)
     private String canal; // EMAIL, SMS, PUSH, INTERNAL
@@ -183,5 +186,13 @@ public class Notification {
 
     public void setFechaProximoIntento(LocalDateTime fechaProximoIntento) {
         this.fechaProximoIntento = fechaProximoIntento;
+    }
+
+    public String getDestinatarioDirecto() {
+        return destinatarioDirecto;
+    }
+
+    public void setDestinatarioDirecto(String destinatarioDirecto) {
+        this.destinatarioDirecto = destinatarioDirecto;
     }
 }

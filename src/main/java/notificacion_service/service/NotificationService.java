@@ -30,14 +30,24 @@ public class NotificationService {
 
     public Notification createDirectNotification(NotificationDirectRequest request) {
         Notification notification = new Notification();
-        notification.setUsuarioDestinatario(request.getUsuarioDestinatario());
         
-        // Si no se define el canal en el request, obtener el canal preferido del usuario
         String canal = request.getCanal();
-        if (canal == null || canal.isEmpty()) {
-            UserPreference prefs = userServiceClient.getUserPreferences(request.getUsuarioDestinatario());
-            canal = prefs.getCanalPreferido();
+        
+        if (request.getDestinatarioDirecto() != null && !request.getDestinatarioDirecto().isEmpty()) {
+            notification.setDestinatarioDirecto(request.getDestinatarioDirecto());
+            notification.setUsuarioDestinatario(null);
+            if (canal == null || canal.isEmpty()) {
+                canal = "EMAIL"; // Canal por defecto para envíos directos
+            }
+        } else {
+            notification.setUsuarioDestinatario(request.getUsuarioDestinatario());
+            // Si no se define el canal en el request, obtener el canal preferido del usuario
+            if (canal == null || canal.isEmpty()) {
+                UserPreference prefs = userServiceClient.getUserPreferences(request.getUsuarioDestinatario());
+                canal = prefs.getCanalPreferido();
+            }
         }
+        
         notification.setCanal(canal.toUpperCase());
         notification.setAsunto(request.getAsunto());
         notification.setMensaje(request.getMensaje());
@@ -53,12 +63,22 @@ public class NotificationService {
         notification.setIntentosMaximos(maxAttempts);
 
         Notification saved = notificationRepository.save(notification);
-        logger.info("[SERVICE] Creada notificación directa ID {} para usuario {} (Prioridad: {}, Canal: {})", 
-                saved.getId(), saved.getUsuarioDestinatario(), saved.getPrioridad(), saved.getCanal());
+        
+        if (saved.getUsuarioDestinatario() != null) {
+            logger.info("[SERVICE] Creada notificación directa ID {} para usuario {} (Prioridad: {}, Canal: {})", 
+                    saved.getId(), saved.getUsuarioDestinatario(), saved.getPrioridad(), saved.getCanal());
 
-        auditServiceClient.sendAuditLog("CREAR_NOTIFICACION", 
-                "Notificación directa registrada para usuario " + saved.getUsuarioDestinatario() + " por canal " + saved.getCanal(), 
-                saved.getTrackingId(), "SUCCESS");
+            auditServiceClient.sendAuditLog("CREAR_NOTIFICACION", 
+                    "Notificación directa registrada para usuario " + saved.getUsuarioDestinatario() + " por canal " + saved.getCanal(), 
+                    saved.getTrackingId(), "SUCCESS");
+        } else {
+            logger.info("[SERVICE] Creada notificación directa ID {} para destinatario {} (Prioridad: {}, Canal: {})", 
+                    saved.getId(), saved.getDestinatarioDirecto(), saved.getPrioridad(), saved.getCanal());
+
+            auditServiceClient.sendAuditLog("CREAR_NOTIFICACION", 
+                    "Notificación directa registrada para destinatario " + saved.getDestinatarioDirecto() + " por canal " + saved.getCanal(), 
+                    saved.getTrackingId(), "SUCCESS");
+        }
 
         return saved;
     }

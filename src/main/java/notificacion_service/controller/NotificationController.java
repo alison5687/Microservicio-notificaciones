@@ -64,4 +64,13 @@ public class NotificationController {
             return ResponseEntity.badRequest().body("Error al obtener notificaciones no leídas: " + e.getMessage());
         }
     }
+
+    @GetMapping("/health")
+    public ResponseEntity<?> checkHealth() {
+        java.util.Map<String, Object> status = new java.util.HashMap<>();
+        status.put("status", "UP");
+        status.put("timestamp", java.time.LocalDateTime.now().toString());
+        status.put("database", "H2 (In-Memory)");
+        return ResponseEntity.ok(status);
+    }
 }

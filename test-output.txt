@@ -1,0 +1,90 @@
+﻿15:11:33.111 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+15:11:33.118 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+15:11:33.147 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [notificacion_service.NotificationControllerTest] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+15:11:33.157 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [notificacion_service.NotificationControllerTest], using SpringBootContextLoader
+15:11:33.160 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [notificacion_service.NotificationControllerTest]: class path resource [notificacion_service/NotificationControllerTest-context.xml] does not exist
+15:11:33.161 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [notificacion_service.NotificationControllerTest]: class path resource [notificacion_service/NotificationControllerTestContext.groovy] does not exist
+15:11:33.161 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [notificacion_service.NotificationControllerTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+15:11:33.161 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [notificacion_service.NotificationControllerTest]: NotificationControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:11:33.209 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [notificacion_service.NotificationControllerTest]
+15:11:33.261 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [C:\Users\ASUS\Desktop\notificacion-service\target\classes\notificacion_service\NotificationApplication.class]
+15:11:33.262 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration notificacion_service.NotificationApplication for test class notificacion_service.NotificationControllerTest
+15:11:33.330 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [notificacion_service.NotificationControllerTest]: using defaults.
+15:11:33.330 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+15:11:33.349 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@4f0100a7, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@3cdf2c61, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@13ad5cd3, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@1c33c17b, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5bf0fe62, org.springframework.test.context.support.DirtiesContextTestExecutionListener@1e097d59, org.springframework.test.context.transaction.TransactionalTestExecutionListener@673be18f, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@6581dc0a, org.springframework.test.context.event.EventPublishingTestExecutionListener@39de3d36, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@6ce86ce1, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@54e7df6a, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@3fed2870, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@77128536, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@58326051, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@32c4e8b2]
+15:11:33.352 [main] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@49ff7d8c testClass = NotificationControllerTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@29526c05 testClass = NotificationControllerTest, locations = '{}', classes = '{class notificacion_service.NotificationApplication}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[[ImportsContextCustomizer@2ef14fe key = [org.springframework.boot.test.autoconfigure.web.servlet.MockMvcAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebClientAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebDriverAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityConfiguration, org.springframework.boot.test.autoconfigure.web.reactive.WebTestClientAutoConfiguration]], org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@4310d43, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@47d9a273, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@272113c4, org.springframework.boot.test.autoconfigure.actuate.metrics.MetricsExportContextCustomizerFactory$DisableMetricExportContextCustomizer@4f80542f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@4b3fa0b3, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@4b45a2f5, org.springframework.boot.test.context.SpringBootTestArgs@1, org.springframework.boot.test.context.SpringBootTestWebEnvironment@33723e30], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -> true]], class annotated with @DirtiesContext [false] with mode [null].
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.7)
+
+2026-06-01 15:11:33 - Starting NotificationControllerTest using Java 26.0.1 on Ali with PID 17832 (started by ASUS in C:\Users\ASUS\Desktop\notificacion-service)
+2026-06-01 15:11:33 - No active profile set, falling back to 1 default profile: "default"
+2026-06-01 15:11:34 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-01 15:11:34 - Finished Spring Data repository scanning in 57 ms. Found 4 JPA repository interfaces.
+2026-06-01 15:11:34 - HikariPool-1 - Starting...
+2026-06-01 15:11:34 - HikariPool-1 - Start completed.
+2026-06-01 15:11:35 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-01 15:11:35 - HHH000412: Hibernate ORM core version 5.6.8.Final
+2026-06-01 15:11:35 - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-06-01 15:11:35 - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-06-01 15:11:36 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-01 15:11:36 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+.\mvnw.cmd : WARNING: A restricted method in java.lang.System has been called
+En línea: 1 Carácter: 1
++ .\mvnw.cmd test -q 2>&1 | Out-File -FilePath .\test-output.txt -Encod ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: A rest...has been called 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: java.lang.System::load has been called by 
+org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/ASUS/.m2/rep
+ository/org/apache/tomcat/embed/tomcat-embed-core/9.0.62/tomcat-embed-core-9.0.
+62.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers 
+in this module
+WARNING: Restricted methods will be blocked in a future release unless native 
+access is enabled
+
+2026-06-01 15:11:36 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-01 15:11:37 - Initializing Spring TestDispatcherServlet ''
+2026-06-01 15:11:37 - Initializing Servlet ''
+2026-06-01 15:11:37 - Completed initialization in 1 ms
+2026-06-01 15:11:37 - Started NotificationControllerTest in 4.025 seconds (JVM running for 4.813)
+2026-06-01 15:11:37 - [SERVICE] Creada notificaci¾n directa ID 1 para usuario 1 (Prioridad: URGENTE, Canal: EMAIL)
+2026-06-01 15:11:37 - [AUDIT-LOG] [ASYNC-START] Operaci¾n: 'CREAR_NOTIFICACION', Detalles: 'Notificaci¾n directa registrada para usuario 1 por canal EMAIL', TrackingId: 'TRK-101', Estado: 'SUCCESS'
+2026-06-01 15:11:37 - [AUDIT-LOG] [SIMULADO] ms-auditoria no disponible (I/O error on POST request for "http://localhost:8081/api/v1/logs": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect). Log registrado localmente en consola.
+2026-06-01 15:11:37 - Neither @ContextConfiguration nor @ContextHierarchy found for test class [notificacion_service.NotificationServiceTest], using SpringBootContextLoader
+2026-06-01 15:11:37 - Could not detect default resource locations for test class [notificacion_service.NotificationServiceTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2026-06-01 15:11:37 - Could not detect default configuration classes for test class [notificacion_service.NotificationServiceTest]: NotificationServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-01 15:11:37 - Found @SpringBootConfiguration notificacion_service.NotificationApplication for test class notificacion_service.NotificationServiceTest
+2026-06-01 15:11:37 - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2026-06-01 15:11:37 - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@45a40353, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@33efa7d4, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@fe337, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@356cb230, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@50b78155, org.springframework.test.context.support.DirtiesContextTestExecutionListener@1e284d90, org.springframework.test.context.transaction.TransactionalTestExecutionListener@61c11339, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@31ecd003, org.springframework.test.context.event.EventPublishingTestExecutionListener@5d3d5242, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1a5c0b8, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@6894436e, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@3f2feab7, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@8b71052, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@2738a1fc, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@6d7d0946]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.7)
+
+2026-06-01 15:11:37 - Starting NotificationServiceTest using Java 26.0.1 on Ali with PID 17832 (started by ASUS in C:\Users\ASUS\Desktop\notificacion-service)
+2026-06-01 15:11:37 - No active profile set, falling back to 1 default profile: "default"
+2026-06-01 15:11:38 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-01 15:11:38 - Finished Spring Data repository scanning in 17 ms. Found 4 JPA repository interfaces.
+2026-06-01 15:11:38 - HikariPool-2 - Starting...
+2026-06-01 15:11:38 - HikariPool-2 - Start completed.
+2026-06-01 15:11:38 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-01 15:11:38 - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-06-01 15:11:38 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-01 15:11:38 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-01 15:11:38 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-01 15:11:38 - Started NotificationServiceTest in 0.871 seconds (JVM running for 6.172)
+2026-06-01 15:11:38 - [SERVICE] Creada notificaci¾n con plantilla 'bienvenida_test' ID 1 para usuario 2 (Canal: EMAIL)
+2026-06-01 15:11:38 - [SERVICE] Creada notificaci¾n directa ID 2 para usuario 1 (Prioridad: URGENTE, Canal: EMAIL)

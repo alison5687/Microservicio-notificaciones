@@ -74,53 +74,81 @@ public class NotificationProcessor {
 
     private void processSingleNotification(Notification notification) {
         Long userId = notification.getUsuarioDestinatario();
-        
-        // 1. Obtener preferencias de usuario
-        UserPreference prefs = userServiceClient.getUserPreferences(userId);
-
-        // 2. Si el usuario tiene las notificaciones desactivadas a nivel general, marcamos como FALLIDA directamente
-        if (!prefs.isActivo()) {
-            logger.warn("[PROCESSOR] Notificación ID {} cancelada: El usuario {} tiene notificaciones inactivas", 
-                    notification.getId(), userId);
-            notification.setEstado("FALLIDA");
-            notification.setFechaProximoIntento(null);
-            notificationRepository.save(notification);
-            
-            auditServiceClient.sendAuditLog("ENVIAR_NOTIFICACION", 
-                    "Cancelada: usuario " + userId + " tiene notificaciones inactivas", 
-                    notification.getTrackingId(), "FAILURE");
-            return;
-        }
-
-        // 3. Verificar Horario de No Molestar (DND) si la prioridad no es URGENTE
-        if (!"URGENTE".equalsIgnoreCase(notification.getPrioridad())) {
-            if (isInsideDndWindow(prefs.getHoraInicioNoMolestar(), prefs.getHoraFinNoMolestar())) {
-                logger.info("[PROCESSOR] Notificación ID {} (Prioridad: {}) para usuario {} omitida temporalmente debido al Horario de No Molestar ({} - {})",
-                        notification.getId(), notification.getPrioridad(), userId, 
-                        prefs.getHoraInicioNoMolestar(), prefs.getHoraFinNoMolestar());
-                // Sigue en PENDIENTE y se volverá a procesar en el próximo ciclo
-                return;
-            }
-        }
-
-        // 4. Determinar datos de contacto según el canal
         String canal = notification.getCanal();
         String targetContact = "";
         NotificationSender sender = null;
 
-        if ("EMAIL".equalsIgnoreCase(canal)) {
-            targetContact = userServiceClient.getUserEmail(userId);
-            sender = emailSender;
-        } else if ("SMS".equalsIgnoreCase(canal)) {
-            targetContact = userServiceClient.getUserMobilePhone(userId);
-            sender = smsSender;
-        } else if ("PUSH".equalsIgnoreCase(canal)) {
-            targetContact = userId.toString();
-            sender = pushSender;
-        } else if ("INTERNAL".equalsIgnoreCase(canal)) {
-            targetContact = userId.toString();
-            sender = internalSender;
+        if (userId != null) {
+            // Flujo con usuario registrado
+            // 1. Obtener preferencias de usuario
+            UserPreference prefs = userServiceClient.getUserPreferences(userId);
+
+            // 2. Si el usuario tiene las notificaciones desactivadas a nivel general, marcamos como FALLIDA directamente
+            if (!prefs.isActivo()) {
+                logger.warn("[PROCESSOR] Notificación ID {} cancelada: El usuario {} tiene notificaciones inactivas", 
+                        notification.getId(), userId);
+                notification.setEstado("FALLIDA");
+                notification.setFechaProximoIntento(null);
+                notificationRepository.save(notification);
+                
+                auditServiceClient.sendAuditLog("ENVIAR_NOTIFICACION", 
+                        "Cancelada: usuario " + userId + " tiene notificaciones inactivas", 
+                        notification.getTrackingId(), "FAILURE");
+                return;
+            }
+
+            // 3. Verificar Horario de No Molestar (DND) si la prioridad no es URGENTE
+            if (!"URGENTE".equalsIgnoreCase(notification.getPrioridad())) {
+                if (isInsideDndWindow(prefs.getHoraInicioNoMolestar(), prefs.getHoraFinNoMolestar())) {
+                    logger.info("[PROCESSOR] Notificación ID {} (Prioridad: {}) para usuario {} omitida temporalmente debido al Horario de No Molestar ({} - {})",
+                            notification.getId(), notification.getPrioridad(), userId, 
+                            prefs.getHoraInicioNoMolestar(), prefs.getHoraFinNoMolestar());
+                    // Sigue en PENDIENTE y se volverá a procesar en el próximo ciclo
+                    return;
+                }
+            }
+
+            // 4. Determinar datos de contacto según el canal
+            if ("EMAIL".equalsIgnoreCase(canal)) {
+                targetContact = userServiceClient.getUserEmail(userId);
+                sender = emailSender;
+            } else if ("SMS".equalsIgnoreCase(canal)) {
+                targetContact = userServiceClient.getUserMobilePhone(userId);
+                sender = smsSender;
+            } else if ("PUSH".equalsIgnoreCase(canal)) {
+                targetContact = userId.toString();
+                sender = pushSender;
+            } else if ("INTERNAL".equalsIgnoreCase(canal)) {
+                targetContact = userId.toString();
+                sender = internalSender;
+            }
         } else {
+            // Flujo de destinatario directo (sin ID de usuario)
+            targetContact = notification.getDestinatarioDirecto();
+            if (targetContact == null || targetContact.isEmpty()) {
+                logger.error("[PROCESSOR] Destinatario directo vacío para notificación ID {}", notification.getId());
+                notification.setEstado("FALLIDA");
+                notification.setFechaProximoIntento(null);
+                notificationRepository.save(notification);
+                
+                auditServiceClient.sendAuditLog("ENVIAR_NOTIFICACION", 
+                        "Fallo: destinatario directo vacío", 
+                        notification.getTrackingId(), "FAILURE");
+                return;
+            }
+
+            if ("EMAIL".equalsIgnoreCase(canal)) {
+                sender = emailSender;
+            } else if ("SMS".equalsIgnoreCase(canal)) {
+                sender = smsSender;
+            } else if ("PUSH".equalsIgnoreCase(canal)) {
+                sender = pushSender;
+            } else if ("INTERNAL".equalsIgnoreCase(canal)) {
+                sender = internalSender;
+            }
+        }
+
+        if (sender == null) {
             logger.error("[PROCESSOR] Canal '{}' desconocido para notificación ID {}", canal, notification.getId());
             notification.setEstado("FALLIDA");
             notification.setFechaProximoIntento(null);
@@ -136,7 +164,7 @@ public class NotificationProcessor {
         int intentoActual = notification.getIntentosRealizados() + 1;
         notification.setIntentosRealizados(intentoActual);
 
-        // 6. Realizar el envío simulado
+        // 6. Realizar el envío
         try {
             sender.send(notification, targetContact);
             
@@ -147,7 +175,7 @@ public class NotificationProcessor {
             notificationRepository.save(notification);
 
             // Guardar Historial de Reintentos
-            saveRetryHistory(notification, intentoActual, "EXITO", "Envío simulado completado con éxito");
+            saveRetryHistory(notification, intentoActual, "EXITO", "Envío completado con éxito");
             
             // Auditoría asíncrona
             auditServiceClient.sendAuditLog("ENVIAR_NOTIFICACION", 
